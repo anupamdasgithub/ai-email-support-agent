@@ -1,0 +1,43 @@
+{
+  "id": "loan-specialist-review-form",
+  "name": "Loan Specialist Review",
+  "components": [
+    {
+      "type": "text",
+      "text": "## Loan Specialist Review\nThe AI agent requires your assessment for this application.",
+      "id": "header-text"
+    },
+    {
+      "type": "text",
+      "text": "**Applicant:** {{applicantName}}  \n**Loan Amount:** ₹{{loanAmount}}  \n**Purpose:** {{loanPurpose}}  \n**Annual Income:** ₹{{annualIncome}}  \n**Credit Score:** {{creditScore}}",
+      "id": "summary-text"
+    },
+    {
+      "type": "text",
+      "text": "### AI Agent Assessment\n{{agentResponse}}",
+      "id": "ai-assessment-text"
+    },
+    {
+      "type": "select",
+      "key": "specialistDecision",
+      "label": "Your Decision",
+      "values": [
+        { "label": "Approve", "value": "approve" },
+        { "label": "Reject", "value": "reject" },
+        { "label": "Request More Information", "value": "more-info" }
+      ],
+      "validate": { "required": true },
+      "id": "specialistDecision-field"
+    },
+    {
+      "type": "textarea",
+      "key": "specialistNotes",
+      "label": "Notes / Justification",
+      "description": "Mandatory for rejections and more-info requests",
+      "validate": { "required": false },
+      "id": "specialistNotes-field"
+    }
+  ],
+  "schemaVersion": 16,
+  "type": "default"
+}

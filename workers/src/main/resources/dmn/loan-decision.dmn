@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/"
+             xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/"
+             xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/"
+             id="loan-decision-definitions"
+             name="Loan Decision Rules"
+             namespace="http://camunda.org/schema/1.0/dmn">
+
+  <decision id="loanAutoDecision" name="Loan Auto Decision">
+    <decisionTable id="decisionTable"
+                   hitPolicy="FIRST">
+
+      <input id="input-credit-score" label="Credit Score">
+        <inputExpression id="inputExpression-creditScore"
+                         typeRef="integer">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+
+      <input id="input-annual-income" label="Annual Income (INR)">
+        <inputExpression id="inputExpression-annualIncome"
+                         typeRef="long">
+          <text>annualIncome</text>
+        </inputExpression>
+      </input>
+
+      <input id="input-loan-amount" label="Loan Amount (INR)">
+        <inputExpression id="inputExpression-loanAmount"
+                         typeRef="long">
+          <text>loanAmount</text>
+        </inputExpression>
+      </input>
+
+      <input id="input-employment" label="Employment Status">
+        <inputExpression id="inputExpression-employment"
+                         typeRef="string">
+          <text>employmentStatus</text>
+        </inputExpression>
+      </input>
+
+      <output id="output-recommendation"
+              label="DMN Recommendation"
+              name="dmnRecommendation"
+              typeRef="string"/>
+
+      <output id="output-reason"
+              label="Reason"
+              name="dmnReason"
+              typeRef="string"/>
+
+      <!-- Rule 1: High credit, good income, employed → auto approve -->
+      <rule id="rule1">
+        <inputEntry id="ie1-1"><text>&gt;= 750</text></inputEntry>
+        <inputEntry id="ie1-2"><text>&gt;= 500000</text></inputEntry>
+        <inputEntry id="ie1-3"><text>&lt;= 10000000</text></inputEntry>
+        <inputEntry id="ie1-4"><text>"employed","self-employed"</text></inputEntry>
+        <outputEntry id="oe1-1"><text>"approve"</text></outputEntry>
+        <outputEntry id="oe1-2"><text>"Strong credit and income profile"</text></outputEntry>
+      </rule>
+
+      <!-- Rule 2: Good credit, moderate income → approve smaller loans -->
+      <rule id="rule2">
+        <inputEntry id="ie2-1"><text>[700..750)</text></inputEntry>
+        <inputEntry id="ie2-2"><text>&gt;= 400000</text></inputEntry>
+        <inputEntry id="ie2-3"><text>&lt;= 5000000</text></inputEntry>
+        <inputEntry id="ie2-4"><text>"employed"</text></inputEntry>
+        <outputEntry id="oe2-1"><text>"approve"</text></outputEntry>
+        <outputEntry id="oe2-2"><text>"Meets minimum approval criteria"</text></outputEntry>
+      </rule>
+
+      <!-- Rule 3: Medium credit → send to review -->
+      <rule id="rule3">
+        <inputEntry id="ie3-1"><text>[600..700)</text></inputEntry>
+        <inputEntry id="ie3-2"><text>-</text></inputEntry>
+        <inputEntry id="ie3-3"><text>-</text></inputEntry>
+        <inputEntry id="ie3-4"><text>-</text></inputEntry>
+        <outputEntry id="oe3-1"><text>"review"</text></outputEntry>
+        <outputEntry id="oe3-2"><text>"Credit score in review band 600-700"</text></outputEntry>
+      </rule>
+
+      <!-- Rule 4: Unemployed with large loan → reject -->
+      <rule id="rule4">
+        <inputEntry id="ie4-1"><text>-</text></inputEntry>
+        <inputEntry id="ie4-2"><text>-</text></inputEntry>
+        <inputEntry id="ie4-3"><text>&gt; 2500000</text></inputEntry>
+        <inputEntry id="ie4-4"><text>"unemployed"</text></inputEntry>
+        <outputEntry id="oe4-1"><text>"reject"</text></outputEntry>
+        <outputEntry id="oe4-2"><text>"Unemployed applicant exceeds unsecured loan limit"</text></outputEntry>
+      </rule>
+
+      <!-- Rule 5: Very low credit → reject -->
+      <rule id="rule5">
+        <inputEntry id="ie5-1"><text>&lt; 600</text></inputEntry>
+        <inputEntry id="ie5-2"><text>-</text></inputEntry>
+        <inputEntry id="ie5-3"><text>-</text></inputEntry>
+        <inputEntry id="ie5-4"><text>-</text></inputEntry>
+        <outputEntry id="oe5-1"><text>"reject"</text></outputEntry>
+        <outputEntry id="oe5-2"><text>"Credit score below minimum threshold of 600"</text></outputEntry>
+      </rule>
+
+      <!-- Rule 6: Default — send to AI agent for assessment -->
+      <rule id="rule6">
+        <inputEntry id="ie6-1"><text>-</text></inputEntry>
+        <inputEntry id="ie6-2"><text>-</text></inputEntry>
+        <inputEntry id="ie6-3"><text>-</text></inputEntry>
+        <inputEntry id="ie6-4"><text>-</text></inputEntry>
+        <outputEntry id="oe6-1"><text>"review"</text></outputEntry>
+        <outputEntry id="oe6-2"><text>"Requires AI agent assessment"</text></outputEntry>
+      </rule>
+
+    </decisionTable>
+  </decision>
+</definitions>

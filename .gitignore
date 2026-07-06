@@ -1,0 +1,40 @@
+# Secrets — never commit
+**/connector-secrets.txt
+**/.env
+deploy/secrets/connector-secrets.txt
+deploy/.env
+*.pem
+*.key
+*_secret
+*.p12
+*.pfx
+!**/*.template
+!deploy/.env.template
+
+# Build output
+workers/target/
+**/target/
+*.class
+*.jar
+!**/*-sources.jar
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Runtime
+.run-logs/
+
+# Backups / noise
+*.bak
+pom.xml.bak
+.DS_Store
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml

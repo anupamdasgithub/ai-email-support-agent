@@ -1,0 +1,92 @@
+{
+  "id": "loan-application-form",
+  "name": "Loan Application",
+  "components": [
+    {
+      "type": "text",
+      "text": "## Bank Loan Application\nPlease fill in all required fields to submit your loan request.",
+      "id": "intro-text"
+    },
+    {
+      "type": "textfield",
+      "key": "customerId",
+      "label": "Customer ID",
+      "description": "Your bank account / CIF number",
+      "validate": { "required": true },
+      "id": "customerId-field"
+    },
+    {
+      "type": "textfield",
+      "key": "applicantName",
+      "label": "Full Name",
+      "validate": { "required": true },
+      "id": "applicantName-field"
+    },
+    {
+      "type": "textfield",
+      "key": "applicantEmail",
+      "label": "Email Address",
+      "description": "We will send your loan decision here",
+      "validate": { "required": true },
+      "id": "applicantEmail-field"
+    },
+    {
+      "type": "number",
+      "key": "loanAmount",
+      "label": "Loan Amount (INR)",
+      "description": "Enter amount in Indian Rupees",
+      "validate": { "required": true, "min": 10000, "max": 50000000 },
+      "id": "loanAmount-field"
+    },
+    {
+      "type": "select",
+      "key": "loanPurpose",
+      "label": "Loan Purpose",
+      "values": [
+        { "label": "Home Purchase", "value": "home" },
+        { "label": "Education", "value": "education" },
+        { "label": "Business Expansion", "value": "business" },
+        { "label": "Vehicle Purchase", "value": "vehicle" },
+        { "label": "Personal / Other", "value": "personal" }
+      ],
+      "validate": { "required": true },
+      "id": "loanPurpose-field"
+    },
+    {
+      "type": "number",
+      "key": "annualIncome",
+      "label": "Annual Income (INR)",
+      "validate": { "required": true, "min": 100000 },
+      "id": "annualIncome-field"
+    },
+    {
+      "type": "select",
+      "key": "employmentStatus",
+      "label": "Employment Status",
+      "values": [
+        { "label": "Salaried / Employed", "value": "employed" },
+        { "label": "Self-Employed / Business", "value": "self-employed" },
+        { "label": "Unemployed", "value": "unemployed" }
+      ],
+      "validate": { "required": true },
+      "id": "employmentStatus-field"
+    },
+    {
+      "type": "number",
+      "key": "creditScore",
+      "label": "Credit Score (CIBIL)",
+      "description": "300–900. Leave blank if unknown.",
+      "validate": { "required": false, "min": 300, "max": 900 },
+      "id": "creditScore-field"
+    },
+    {
+      "type": "number",
+      "key": "tenureMonths",
+      "label": "Requested Tenure (months)",
+      "validate": { "required": true, "min": 12, "max": 360 },
+      "id": "tenureMonths-field"
+    }
+  ],
+  "schemaVersion": 16,
+  "type": "default"
+}

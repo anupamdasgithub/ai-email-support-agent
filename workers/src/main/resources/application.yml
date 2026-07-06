@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: bank-ai-loan-approval
+
+camunda:
+  client:
+    mode: self-managed
+    zeebe:
+      defaults:
+        force-fetch-all-variables: true
+    auth:
+      client-id: orchestration
+      client-secret: secret
+      token-url: http://localhost:18080/auth/realms/camunda-platform/protocol/openid-connect/token
+    grpc-address: grpc://localhost:26500
+    rest-address: http://localhost:8080
+    prefer-rest-over-grpc: true
+
+# RAG pipeline wiring. Workers run as a local JVM process (not inside the Docker
+# network), so the embeddings service and Elasticsearch are reached via their
+# published host ports on localhost, NOT their in-network container hostnames.
+embeddings:
+  service:
+    url: http://localhost:8000
+
+elasticsearch:
+  host: localhost
+  port: 9200
+  scheme: http
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    io.camunda: DEBUG
+    io.grpc: DEBUG
+    io.camunda.example.loan.rag: DEBUG
+    io.camunda.example.loan.worker: DEBUG
+
+server:
+  port: 8090
