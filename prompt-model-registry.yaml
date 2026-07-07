@@ -1,0 +1,69 @@
+# Prompt & Model Registry
+
+Single source of truth for which prompt text and which model each agent step
+uses, with the date and rationale for each choice. Update this file whenever a
+prompt or model changes, and commit the change — git history then gives you a
+full audit trail of how the agent's behaviour evolved and why.
+
+Format: one entry per agent step. `version` bumps when prompt or model changes.
+
+---
+
+registry_version: 1
+last_updated: 2026-07-07
+
+entries:
+
+  - id: main-agent
+    step_name: "Handle customer request (main agent)"
+    version: 1
+    date: 2026-07-07
+    model: claude-sonnet-4-6
+    provider: openai-compatible (local stub / AWS Bedrock in prod)
+    endpoint: http://host.docker.internal:9999/v1
+    prompt_summary: >
+      LoanSupportAgent system prompt. Strict loan-domain scope; mandatory
+      tool-driven workflow; chain-of-thought in XML tags; PII/regulatory rules;
+      satisfaction-confirmation + final-email close.
+    prompt_ref: "process/bpmn/ai-email-support-agent.bpmn -> Activity_04glkkx systemPrompt"
+    rationale: >
+      Sonnet chosen for strong tool-use + reasoning at acceptable latency/cost.
+      Strict-scope wording added to enforce out-of-scope rejection guardrail.
+
+  - id: agent-as-judge
+    step_name: "Agent as a Judge"
+    version: 1
+    date: 2026-07-07
+    model: claude-sonnet-4-6
+    provider: openai-compatible (local stub / AWS Bedrock in prod)
+    endpoint: http://host.docker.internal:9999/v1
+    prompt_summary: >
+      Agent Performance Evaluator. Reads the customer<->agent exchange and emits
+      a single JSON verdict: AGENT_SUCCESS | AGENT_SUBOPTIMAL |
+      HUMAN_INTERVENTION_REQUIRED, plus reasoning fields.
+    prompt_ref: "process/bpmn/ai-email-support-agent.bpmn -> Activity_0hp732o systemPrompt"
+    rationale: >
+      Same model as main agent for consistency. Judge enforces domain-scope
+      compliance and routes to human escalation — the governance guardrail.
+
+  - id: rag-embeddings
+    step_name: "Query knowledge base (RAG)"
+    version: 1
+    date: 2026-07-07
+    model: all-mpnet-base-v2 (sentence-transformers)
+    provider: local embeddings service
+    endpoint: http://embeddings-service:8000
+    prompt_summary: >
+      No LLM prompt; embedding model for kNN over specialist-knowledge-base
+      dense_vector index. TOP_K=3, MIN_SCORE=0.3.
+    prompt_ref: "workers QueryKnowledgeBaseWorker.java"
+    rationale: >
+      Local embeddings avoid per-call cost and keep KB content on-prem. mpnet
+      chosen for solid retrieval quality at small model size (16GB Mac).
+
+# ---------------------------------------------------------------------------
+# Change log (newest first). Append an entry each time a prompt/model changes.
+# ---------------------------------------------------------------------------
+changelog:
+  - date: 2026-07-07
+    change: "Initial registry created; recorded main-agent, judge, RAG at v1."
