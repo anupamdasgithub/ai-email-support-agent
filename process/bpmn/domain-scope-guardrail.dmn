@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="scope_guardrail_definitions" name="Domain Scope Guardrail" namespace="http://camunda.org/schema/1.0/dmn" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.9.0">
+  <decision id="domain_scope_decision" name="Domain Scope Decision">
+    <decisionTable id="scope_table" hitPolicy="FIRST">
+      <input id="in_hasLoanTerm" label="Has loan-domain term">
+        <inputExpression id="expr_hasLoanTerm" typeRef="boolean">
+          <text>some term in ["loan","mortgage","repayment","payoff","interest rate","principal","installment","instalment","emi","collateral","refinance","amortization","amortisation","credit","borrow","lending","disbursement","foreclosure","arrears","overdue","statement","apr","escrow","default","outstanding balance","settle","prepayment","early repayment","early-repayment"] satisfies contains(lower case(message), term)</text>
+        </inputExpression>
+      </input>
+      <input id="in_hasOutTerm" label="Has out-of-domain term">
+        <inputExpression id="expr_hasOutTerm" typeRef="boolean">
+          <text>some term in ["weather","restaurant","recipe","sports","movie","vacation","flight","hotel","sushi","traffic","horoscope","lottery","joke","poem","song","game","celebrity","politics"] satisfies contains(lower case(message), term)</text>
+        </inputExpression>
+      </input>
+      <output id="out_decision" label="Scope" name="scopeDecision" typeRef="string" />
+      <rule id="rule_loan">
+        <inputEntry id="r1_loan">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="r1_out">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="r1_dec">
+          <text>"IN_SCOPE"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_out">
+        <inputEntry id="r2_loan">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="r2_out">
+          <text>true</text>
+        </inputEntry>
+        <outputEntry id="r2_dec">
+          <text>"OUT_OF_SCOPE"</text>
+        </outputEntry>
+      </rule>
+      <rule id="rule_ambiguous">
+        <inputEntry id="r3_loan">
+          <text>false</text>
+        </inputEntry>
+        <inputEntry id="r3_out">
+          <text>false</text>
+        </inputEntry>
+        <outputEntry id="r3_dec">
+          <text>"IN_SCOPE"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="domain_scope_decision">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
