@@ -83,3 +83,16 @@ See `LIFECYCLE.md` - prompt/model registry, CI check (`scripts/ci-check.sh` plus
 - **Operate / Tasklist** - process/task state; DMN decision evaluations
 - **Optimize** - heat maps and analysis (`zeebe-record-*` via ElasticsearchExporter)
 - **Kibana** - legacy `llm-metrics` dashboards (optional)
+
+## Attribution & License
+
+Built on **Camunda 8.10** and the **Camunda AI Agent blueprint**. The
+orchestration patterns and the BPMN foundation are Camunda's; the guardrails
+(PII redaction, DMN domain-scope classifier), workers, supporting services,
+deployment configuration, and documentation are original additions authored for
+learning and demonstration.
+
+The original contributions in this repository are released under the **MIT
+License** (see `LICENSE`) — in the same open spirit that Camunda shares its
+blueprints. Camunda's platform, connectors, and original blueprint BPMN remain
+Camunda's and are governed by Camunda's own license terms.
