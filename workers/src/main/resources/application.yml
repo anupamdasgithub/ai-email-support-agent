@@ -13,8 +13,11 @@ camunda:
       client-secret: secret
       token-url: http://localhost:18080/auth/realms/camunda-platform/protocol/openid-connect/token
     grpc-address: grpc://localhost:26500
-    rest-address: http://localhost:8080
-    prefer-rest-over-grpc: true
+    # Camunda 8.8 stack publishes orchestration on host port 8088 (container 8080).
+    rest-address: http://localhost:8088
+    # gRPC avoids the REST JSON schema drift between the 8.9 client and 8.8 server
+    # (e.g. "Request property [tenantFilter] cannot be parsed" on /v2/jobs/activation).
+    prefer-rest-over-grpc: false
 
 # RAG pipeline wiring. Workers run as a local JVM process (not inside the Docker
 # network), so the embeddings service and Elasticsearch are reached via their
@@ -40,8 +43,11 @@ management:
 logging:
   level:
     root: INFO
-    io.camunda: DEBUG
-    io.grpc: DEBUG
+    # io.grpc at DEBUG dumps every HTTP/2 frame; ActivateJobs long-polls every
+    # ~20s, so it floods the console and hides the startup banner.
+    io.grpc: WARN
+    io.camunda: INFO
+    # Keep our own code verbose - this is the signal we actually want.
     io.camunda.example.loan.rag: DEBUG
     io.camunda.example.loan.worker: DEBUG
 
