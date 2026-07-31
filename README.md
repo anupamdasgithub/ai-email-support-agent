@@ -7,8 +7,7 @@ and either resolves the case autonomously or escalates to a human — with the
 resolution saved back to long-term memory. An "Agent as a Judge" step evaluates
 each interaction.
 
-Blueprint: <https://marketplace.camunda.com/en-US/apps/522492/ai-email-support-agent>
----
+Blueprint: https://marketplace.camunda.com/en-US/apps/522492/ai-email-support-agent
 
 ## Camunda version support
 
@@ -59,7 +58,7 @@ freshly pulled still reproduced it. Not fixable through configuration — run on
 - Docker + Docker Compose
 - Camunda 8.8 self-managed images (pulled by compose)
 - JDK 21 + Maven (to build `workers/`)
-
+- Apple Silicon supported
 
 ## Run (local)
 
@@ -122,7 +121,9 @@ field names whichever source actually won.
   rule task runs first; a gateway routes `OUT_OF_SCOPE` messages to an escalation
   end event, so off-domain requests never reach the agent. Deterministic and
   provable, independent of the LLM. See `docs/OutOfScope-DMN-Test-Note.md`.
-
+- **PII redaction** — the `PiiRedactor` in `workers` deterministically redacts
+  emails, phones, SSNs, and account IDs before any LLM call. Unit-tested
+  (`PiiRedactorTest`). See `docs/PII-Guardrail-Test-Note.md`.
 
 ## Security
 
@@ -144,8 +145,10 @@ See `LIFECYCLE.md` - prompt/model registry, CI check (`scripts/ci-check.sh` plus
 
 ## Attribution & License
 
-Built on **Camunda 8** and the **Camunda AI Agent blueprint**. The orchestration
-patterns and the BPMN foundation are Camunda's; the guardrails (PII redaction,
+Built on **Camunda 8** and the
+[AI Email Support Agent blueprint](https://marketplace.camunda.com/en-US/apps/522492/ai-email-support-agent)
+from the Camunda Marketplace. The orchestration patterns and the BPMN
+foundation are Camunda's; the guardrails (PII redaction,
 DMN domain-scope classifier), workers, supporting services, deployment
 configuration, and documentation are original additions authored for learning
 and demonstration.
