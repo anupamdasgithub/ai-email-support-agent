@@ -121,21 +121,6 @@ field names whichever source actually won.
   rule task runs first; a gateway routes `OUT_OF_SCOPE` messages to an escalation
   end event, so off-domain requests never reach the agent. Deterministic and
   provable, independent of the LLM. See `docs/OutOfScope-DMN-Test-Note.md`.
-- **PII redaction** — the `PiiRedactor` in `workers` deterministically redacts
-  emails, phones, SSNs, and account IDs before any LLM call. Unit-tested
-  (`PiiRedactorTest`). See `docs/PII-Guardrail-Test-Note.md`.
-
-## Security
-
-Secrets are **never** committed. `.env`, `connector-secrets.txt`, and the Docker
-secrets directory are git-ignored; only `*.template` files with placeholders are
-tracked. Any credential ever exposed must be **rotated**, not just removed.
-
-## Lifecycle
-
-See `LIFECYCLE.md` - prompt/model registry, CI check (`scripts/ci-check.sh` plus
-`.github/workflows/ci.yml`), and rollback via the previous tagged BPMN
-(`git tag` scheme `bpmn-v<N>-good`; latest verified: `bpmn-v9-good`).
 
 ## Observability
 
